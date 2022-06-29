@@ -3,13 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Capacitor } from '@capacitor/core';
+import Portals from '@ionic/portals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+if (!Capacitor.isNativePlatform()) {
+  window.portalInitialContext = {
+    value: {
+      message: "I run on the web"
+    }
+  }
+}
+
+Portals.getInitialContext().then((context) => {
+  const root = ReactDOM.createRoot(document.getElementById('root'));
+  root.render(
+    <React.StrictMode>
+      <App context={context.value} />
+    </React.StrictMode>
+  );
+});
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
